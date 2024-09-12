@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/date_symbol_data_local.dart';
+import 'package:intl/intl.dart';
 import 'package:mood_diary/home/home.dart';
 
-void main() {
+Future<void> main() async {
+  await initializeDateFormatting('ru_RU', null);
+  Intl.defaultLocale = 'RU';
   runApp(const MyApp());
 }
 
@@ -15,9 +19,15 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         useMaterial3: true,
         scaffoldBackgroundColor: const Color(0xFFfffdfc),
-        appBarTheme: const AppBarTheme(
-          surfaceTintColor: Color(0xFFfffdfc),
-          backgroundColor: Color(0xFFfffdfc),
+        appBarTheme: AppBarTheme(
+          surfaceTintColor: const Color(0xFFfffdfc),
+          backgroundColor: const Color(0xFFfffdfc),
+          titleTextStyle: GoogleFonts.nunito(
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
+            color: const Color(0xFF919eab),
+          ),
+          actionsIconTheme: const IconThemeData(color: Color(0xFF919eab)),
         ),
         primaryColor: const Color(0xFFff8702),
         colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFFff8702)),
