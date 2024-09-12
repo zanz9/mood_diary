@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mood_diary/diary/bloc/diary_bloc.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
 
@@ -37,10 +39,12 @@ class _SliderWidgetState extends State<SliderWidget> {
               ),
               child: SfSlider(
                 value: _value,
-                onChanged: (value) {
-                  _value = value;
-                  setState(() {});
-                },
+                onChanged: context.watch<DiaryBloc>().currentMood == -1
+                    ? null
+                    : (value) {
+                        _value = value;
+                        setState(() {});
+                      },
                 activeColor: theme.primaryColor,
                 inactiveColor: theme.disabledColor,
                 min: 0,

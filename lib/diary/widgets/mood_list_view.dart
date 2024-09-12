@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mood_diary/diary/bloc/diary_bloc.dart';
 
 class MoodListView extends StatelessWidget {
   const MoodListView({super.key});
@@ -43,35 +45,42 @@ class MoodWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
-    return Container(
-      width: 100,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(76),
-        // border: Border.all(
-        //   color: theme.primaryColor,
-        //   width: 2,
-        // ),
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: theme.shadowColor,
-            offset: const Offset(2, 4),
-            blurRadius: 10.8,
-            spreadRadius: 0,
-          )
-        ],
-      ),
-      margin: const EdgeInsets.only(left: 16, bottom: 20, top: 5),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Image.asset('assets/moods/$index.png'),
-          const SizedBox(height: 8),
-          Text(
-            text,
-            style: theme.textTheme.bodySmall,
-          ),
-        ],
+    return GestureDetector(
+      onTap: () {
+        context.read<DiaryBloc>().add(OnDiaryMoodChanged(mood: index));
+      },
+      child: Container(
+        width: 100,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(76),
+          border: context.watch<DiaryBloc>().currentMood == index
+              ? Border.all(
+                  color: theme.primaryColor,
+                  width: 2,
+                )
+              : null,
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: theme.shadowColor,
+              offset: const Offset(2, 4),
+              blurRadius: 10.8,
+              spreadRadius: 0,
+            )
+          ],
+        ),
+        margin: const EdgeInsets.only(left: 16, bottom: 20, top: 5),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset('assets/moods/$index.png'),
+            const SizedBox(height: 8),
+            Text(
+              text,
+              style: theme.textTheme.bodySmall,
+            ),
+          ],
+        ),
       ),
     );
   }

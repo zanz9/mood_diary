@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mood_diary/diary/bloc/diary_bloc.dart';
 import 'package:mood_diary/diary/widgets/mood_list_view.dart';
 import 'package:mood_diary/diary/widgets/note_text_area.dart';
+import 'package:mood_diary/diary/widgets/save_button.dart';
 import 'package:mood_diary/diary/widgets/slider_widget.dart';
+import 'package:mood_diary/diary/widgets/sub_mood_widget.dart';
 import 'package:mood_diary/diary/widgets/title_widget.dart';
 
 class Diary extends StatelessWidget {
@@ -9,59 +13,67 @@ class Diary extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var theme = Theme.of(context);
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        const TitleWidget(text: 'Что чувствуешь?'),
-        const MoodListView(),
-        const TitleWidget(text: 'Уровень стресса'),
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16),
-          child: SliderWidget(
-            leftLabel: 'Низкий',
-            rightLabel: 'Высокий',
+    return BlocProvider(
+      create: (context) => DiaryBloc(),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          const TitleWidget(text: 'Что чувствуешь?'),
+          const MoodListView(),
+          BlocBuilder<DiaryBloc, DiaryState>(
+            builder: (context, state) {
+              if (state is DiaryLoaded) {
+                return Wrap(
+                  children: [
+                    for (var i = 0; i < state.subMoods.length; i++)
+                      GestureDetector(
+                        onTap: () {
+                          context
+                              .read<DiaryBloc>()
+                              .add(OnDiarySubMoodChanged(subMood: i));
+                        },
+                        child: SubMoodWidget(
+                          text: state.subMoods[i][0],
+                          isSelected: state.subMoods[i][1],
+                        ),
+                      ),
+                  ],
+                );
+              } else {
+                return const SizedBox();
+              }
+            },
           ),
-        ),
-        const TitleWidget(text: 'Самооценка'),
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16),
-          child: SliderWidget(
-            leftLabel: 'Неуверенность',
-            rightLabel: 'Уверенность',
-          ),
-        ),
-        const TitleWidget(text: 'Заметки'),
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16),
-          child: NoteTextArea(),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: GestureDetector(
-            onTap: () {},
-            child: Container(
-              width: double.infinity,
-              padding: const EdgeInsets.symmetric(vertical: 16),
-              decoration: BoxDecoration(
-                color: theme.primaryColor,
-                borderRadius: BorderRadius.circular(50),
-              ),
-              child: Center(
-                child: Text(
-                  'Сохранить',
-                  style: theme.textTheme.bodyLarge!.copyWith(
-                    color: Colors.white,
-                  ),
-                ),
-              ),
+          const TitleWidget(text: 'Уровень стресса'),
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16),
+            child: SliderWidget(
+              leftLabel: 'Низкий',
+              rightLabel: 'Высокий',
             ),
           ),
-        ),
-      ]
-          .map((el) => Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8), child: el))
-          .toList() as List<Widget>,
+          const TitleWidget(text: 'Самооценка'),
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16),
+            child: SliderWidget(
+              leftLabel: 'Неуверенность',
+              rightLabel: 'Уверенность',
+            ),
+          ),
+          const TitleWidget(text: 'Заметки'),
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16),
+            child: NoteTextArea(),
+          ),
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16),
+            child: SaveButton(),
+          ),
+        ]
+            .map((el) => Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8), child: el))
+            .toList() as List<Widget>,
+      ),
     );
   }
 }
