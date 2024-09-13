@@ -84,7 +84,6 @@ class _CalendarPageState extends State<CalendarPage> {
             today: now.month == index + 1 ? now.day : null,
             selected: selected.month == index + 1 ? selected.day : null,
             onTap: (day) {
-              print(day);
               selected = DateTime(now.year, index + 1, day);
               setState(() {});
             },

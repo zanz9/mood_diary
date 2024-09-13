@@ -7,15 +7,6 @@ class MoodListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const moodNames = [
-      'Радость',
-      'Страх',
-      'Бешенство',
-      'Грусть',
-      'Спокойствие',
-      'Сила',
-    ];
-
     return SizedBox(
       height: 150,
       child: ListView.builder(
@@ -25,7 +16,7 @@ class MoodListView extends StatelessWidget {
         itemBuilder: (context, index) {
           return MoodWidget(
             index: index,
-            text: moodNames[index],
+            text: context.read<DiaryBloc>().moodNames[index],
           );
         },
       ),

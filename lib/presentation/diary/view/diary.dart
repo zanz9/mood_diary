@@ -13,6 +13,7 @@ class Diary extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    TextEditingController noteController = TextEditingController();
     return BlocProvider(
       create: (context) => DiaryBloc(),
       child: Column(
@@ -20,54 +21,70 @@ class Diary extends StatelessWidget {
         children: <Widget>[
           const TitleWidget(text: 'Что чувствуешь?'),
           const MoodListView(),
-          BlocBuilder<DiaryBloc, DiaryState>(
-            builder: (context, state) {
-              if (state is DiaryLoaded) {
-                return Wrap(
-                  children: [
-                    for (var i = 0; i < state.subMoods.length; i++)
-                      GestureDetector(
-                        onTap: () {
-                          context
-                              .read<DiaryBloc>()
-                              .add(OnDiarySubMoodChanged(subMood: i));
-                        },
-                        child: SubMoodWidget(
-                          text: state.subMoods[i][0],
-                          isSelected: state.subMoods[i][1],
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: BlocBuilder<DiaryBloc, DiaryState>(
+              builder: (context, state) {
+                if (state is DiaryLoaded) {
+                  return Wrap(
+                    children: [
+                      for (var i = 0; i < state.subMoods.length; i++)
+                        GestureDetector(
+                          onTap: () {
+                            context
+                                .read<DiaryBloc>()
+                                .add(OnDiarySubMoodChanged(subMood: i));
+                          },
+                          child: SubMoodWidget(
+                            text: state.subMoods[i][0],
+                            isSelected: state.subMoods[i][1],
+                          ),
                         ),
-                      ),
-                  ],
-                );
-              } else {
-                return const SizedBox();
-              }
-            },
+                    ],
+                  );
+                } else {
+                  return const SizedBox();
+                }
+              },
+            ),
           ),
           const TitleWidget(text: 'Уровень стресса'),
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16),
-            child: SliderWidget(
-              leftLabel: 'Низкий',
-              rightLabel: 'Высокий',
-            ),
-          ),
+          Builder(builder: (context) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: SliderWidget(
+                leftLabel: 'Низкий',
+                rightLabel: 'Высокий',
+                onChanged: (level) {
+                  context.read<DiaryBloc>().add(
+                      OnDiaryStressLevelChange(stressLevel: level.toInt()));
+                },
+              ),
+            );
+          }),
           const TitleWidget(text: 'Самооценка'),
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16),
-            child: SliderWidget(
-              leftLabel: 'Неуверенность',
-              rightLabel: 'Уверенность',
-            ),
-          ),
+          Builder(builder: (context) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: SliderWidget(
+                leftLabel: 'Неуверенность',
+                rightLabel: 'Уверенность',
+                onChanged: (rate) {
+                  context
+                      .read<DiaryBloc>()
+                      .add(OnDiarySelfRatingChange(selfRating: rate.toInt()));
+                },
+              ),
+            );
+          }),
           const TitleWidget(text: 'Заметки'),
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16),
-            child: NoteTextArea(),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: NoteTextArea(controller: noteController),
           ),
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16),
-            child: SaveButton(),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: SaveButton(controller: noteController),
           ),
         ]
             .map((el) => Padding(

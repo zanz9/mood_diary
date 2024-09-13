@@ -9,9 +9,11 @@ class SliderWidget extends StatefulWidget {
     super.key,
     required this.leftLabel,
     required this.rightLabel,
+    required this.onChanged,
   });
   final String leftLabel;
   final String rightLabel;
+  final Function(double) onChanged;
 
   @override
   State<SliderWidget> createState() => _SliderWidgetState();
@@ -42,6 +44,7 @@ class _SliderWidgetState extends State<SliderWidget> {
                 onChanged: context.watch<DiaryBloc>().currentMood == -1
                     ? null
                     : (value) {
+                        widget.onChanged(value);
                         _value = value;
                         setState(() {});
                       },
