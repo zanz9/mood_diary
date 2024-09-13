@@ -17,10 +17,12 @@ class _CalendarPageState extends State<CalendarPage> {
   DateTime now = DateTime.now();
   DateTime selected = DateTime.now();
 
+  bool monthView = true;
+
   @override
   void initState() {
     super.initState();
-    var heightBlock = 351;
+    var heightBlock = monthView ? 390 : 220;
     scrollController = ScrollController(
         initialScrollOffset: heightBlock * (now.month.toDouble() - 1));
   }
@@ -28,6 +30,7 @@ class _CalendarPageState extends State<CalendarPage> {
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
+    var scale = 1.0;
 
     return Scaffold(
       appBar: AppBar(
@@ -41,13 +44,15 @@ class _CalendarPageState extends State<CalendarPage> {
         actions: [
           GestureDetector(
             onTap: () {
-              var heightBlock = 351;
+              var heightBlock = monthView ? 390 : 220;
               scrollController.animateTo(
-                heightBlock * (now.month.toDouble() - 1),
-                duration: const Duration(milliseconds: 1000),
+                heightBlock *
+                    ((now.month.toDouble() - 1) / (monthView ? 1 : 2)),
+                duration: const Duration(milliseconds: 700),
                 curve: Curves.easeInOut,
               );
               selected = now;
+
               setState(() {});
             },
             child: Padding(
@@ -61,34 +66,57 @@ class _CalendarPageState extends State<CalendarPage> {
             ),
           )
         ],
-        bottom: PreferredSize(
-          preferredSize: const Size(double.infinity, 40),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: WeekNamesWidget(theme: theme),
-          ),
-        ),
+        bottom: monthView
+            ? PreferredSize(
+                preferredSize: const Size(double.infinity, 40),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: WeekNamesWidget(theme: theme),
+                ),
+              )
+            : null,
       ),
-      body: ListView.builder(
-        controller: scrollController,
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        itemCount: 12,
-        itemBuilder: (context, index) {
-          int monthDayCount = DateTime(now.year, index + 1 + 1, 0).day;
-          int firstWeekDay = DateTime(now.year, index + 1, 1).weekday;
-          return MonthBuilder(
-            year: now.year,
-            month: DateFormat.MMMM().format(DateTime(now.year, index + 1)),
-            dayCount: monthDayCount,
-            firstWeekDay: firstWeekDay,
-            today: now.month == index + 1 ? now.day : null,
-            selected: selected.month == index + 1 ? selected.day : null,
-            onTap: (day) {
-              selected = DateTime(now.year, index + 1, day);
-              setState(() {});
-            },
-          );
+      body: GestureDetector(
+        onScaleUpdate: (details) {
+          scale = details.scale;
         },
+        onScaleEnd: (details) {
+          if (scale > 1.35) {
+            setState(() {
+              monthView = true;
+            });
+          } else if (scale < .65) {
+            setState(() {
+              monthView = false;
+            });
+          }
+        },
+        child: GridView.builder(
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: monthView ? 1 : 2,
+            mainAxisExtent: monthView ? 390 : 220,
+          ),
+          controller: scrollController,
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          itemCount: 12,
+          itemBuilder: (context, index) {
+            int monthDayCount = DateTime(now.year, index + 1 + 1, 0).day;
+            int firstWeekDay = DateTime(now.year, index + 1, 1).weekday;
+            return MonthBuilder(
+              year: now.year,
+              month: DateFormat.MMMM().format(DateTime(now.year, index + 1)),
+              dayCount: monthDayCount,
+              firstWeekDay: firstWeekDay,
+              today: now.month == index + 1 ? now.day : null,
+              selected: selected.month == index + 1 ? selected.day : null,
+              onTap: (day) {
+                selected = DateTime(now.year, index + 1, day);
+                setState(() {});
+              },
+              monthView: monthView,
+            );
+          },
+        ),
       ),
     );
   }

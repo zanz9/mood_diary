@@ -10,6 +10,7 @@ class MonthBuilder extends StatelessWidget {
     this.selected,
     this.today,
     this.onTap,
+    required this.monthView,
   });
   final int year;
   final String month;
@@ -19,6 +20,8 @@ class MonthBuilder extends StatelessWidget {
   final Function(int)? onTap;
   final int? today;
 
+  final bool monthView;
+
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
@@ -26,7 +29,6 @@ class MonthBuilder extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const SizedBox(height: 24),
         Text(
           year.toString(),
           style: theme.textTheme.bodyMedium?.copyWith(
@@ -52,7 +54,7 @@ class MonthBuilder extends StatelessWidget {
                 },
                 child: AnimatedContainer(
                   duration: Durations.medium2,
-                  margin: const EdgeInsets.all(8),
+                  margin: monthView ? const EdgeInsets.all(8) : null,
                   decoration: (selected != null && selected == dayCounter)
                       ? BoxDecoration(
                           borderRadius: BorderRadius.circular(100),
@@ -68,7 +70,9 @@ class MonthBuilder extends StatelessWidget {
                           ? Container(
                               height: 6,
                               width: 6,
-                              margin: const EdgeInsets.only(bottom: 3),
+                              margin: monthView
+                                  ? const EdgeInsets.only(bottom: 3)
+                                  : null,
                               decoration: BoxDecoration(
                                 color: theme.primaryColor,
                                 borderRadius: BorderRadius.circular(100),
@@ -76,7 +80,12 @@ class MonthBuilder extends StatelessWidget {
                             )
                           : const SizedBox(),
                       Center(
-                        child: Text('${dayCounter++}'),
+                        child: Text(
+                          '${dayCounter++}',
+                          style: monthView
+                              ? theme.textTheme.bodyMedium
+                              : theme.textTheme.bodySmall,
+                        ),
                       ),
                     ],
                   ),

@@ -14,7 +14,6 @@ class StatisticsBloc extends Bloc<StatisticsEvent, StatisticsState> {
     on<OnStatistics>((event, emit) {
       var prefs = GetIt.I<SharedPreferences>();
       List<String> historyList = prefs.getStringList('history') ?? [];
-      print(historyList);
       if (historyList.isNotEmpty) {
         List<HistoryModel> history = [];
         for (var element in historyList) {
