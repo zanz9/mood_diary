@@ -3,10 +3,10 @@ import 'package:mood_diary/core/router/router.dart';
 import 'package:mood_diary/core/theme/theme.dart';
 
 class Application extends StatelessWidget {
-  const Application({super.key});
+  const Application({super.key, required this.appRouter});
+  final AppRouter appRouter;
   @override
   Widget build(BuildContext context) {
-    final appRouter = AppRouter();
     return MaterialApp.router(
       title: 'Mood Diary',
       theme: AppTheme.lightTheme,
