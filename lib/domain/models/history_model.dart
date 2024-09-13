@@ -21,7 +21,7 @@ class HistoryModel {
     return HistoryModel(
       iconId: json['iconId'],
       mood: json['mood'],
-      subMoods: json['subMoods'],
+      subMoods: json['subMoods'].cast<String>(),
       stressLevel: json['stressLevel'],
       selfRating: json['selfRating'],
       note: json['note'],

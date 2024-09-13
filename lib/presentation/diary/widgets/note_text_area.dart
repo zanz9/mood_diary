@@ -13,6 +13,7 @@ class NoteTextArea extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: TextField(
+          autocorrect: false,
           controller: controller,
           minLines: 4,
           maxLines: null,

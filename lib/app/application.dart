@@ -12,6 +12,7 @@ class Application extends StatelessWidget {
       theme: AppTheme.lightTheme,
       debugShowCheckedModeBanner: false,
       routerConfig: appRouter.config(),
+      locale: const Locale('ru', 'RU'),
     );
   }
 }

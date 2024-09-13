@@ -8,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class Runner {
   Future<void> run() async {
+    WidgetsFlutterBinding.ensureInitialized();
     await initLocalStorage();
     await initDateFormatter();
     runApp(Application(appRouter: initRouter()));

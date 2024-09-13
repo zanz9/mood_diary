@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 
-class ToggleButtonWidget extends StatefulWidget {
-  const ToggleButtonWidget({super.key});
-
-  @override
-  ToggleButtonWidgetState createState() => ToggleButtonWidgetState();
-}
-
-class ToggleButtonWidgetState extends State<ToggleButtonWidget> {
-  List<bool> isSelected = [true, false];
+class ToggleButtonWidget extends StatelessWidget {
+  const ToggleButtonWidget({
+    super.key,
+    required this.isSelected,
+    this.onTapFirst,
+    this.onTapSecond,
+  });
+  final List<bool> isSelected;
+  final Function()? onTapFirst;
+  final Function()? onTapSecond;
 
   @override
   Widget build(BuildContext context) {
@@ -17,11 +18,7 @@ class ToggleButtonWidgetState extends State<ToggleButtonWidget> {
       mainAxisSize: MainAxisSize.min,
       children: [
         GestureDetector(
-          onTap: () {
-            setState(() {
-              isSelected = [true, false];
-            });
-          },
+          onTap: onTapFirst,
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 300),
             padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
@@ -48,11 +45,7 @@ class ToggleButtonWidgetState extends State<ToggleButtonWidget> {
           ),
         ),
         GestureDetector(
-          onTap: () {
-            setState(() {
-              isSelected = [false, true];
-            });
-          },
+          onTap: onTapSecond,
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 300),
             padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),

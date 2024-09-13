@@ -32,7 +32,7 @@ class AppTheme {
         color: const Color(0xFF4c4c69),
       ),
       bodySmall: GoogleFonts.nunito(
-        fontSize: 12,
+        fontSize: 13,
         color: const Color(0xFF4c4c69),
       ),
       titleLarge: GoogleFonts.nunito(),
