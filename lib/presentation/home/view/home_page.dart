@@ -1,10 +1,13 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:mood_diary/diary/diary.dart';
-import 'package:mood_diary/home/widgets/title_date_now.dart';
-import 'package:mood_diary/home/widgets/toggle_button_widget.dart';
+import 'package:mood_diary/core/router/router.dart';
+import 'package:mood_diary/presentation/diary/view/diary.dart';
+import 'package:mood_diary/presentation/home/widgets/title_date_now.dart';
+import 'package:mood_diary/presentation/home/widgets/toggle_button_widget.dart';
 
-class Home extends StatelessWidget {
-  const Home({
+@RoutePage()
+class HomePage extends StatelessWidget {
+  const HomePage({
     super.key,
   });
 
@@ -16,7 +19,7 @@ class Home extends StatelessWidget {
         centerTitle: true,
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () => context.router.push(const CalendarRoute()),
             icon: const Icon(Icons.calendar_month_rounded),
           )
         ],

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mood_diary/diary/bloc/diary_bloc.dart';
+import 'package:mood_diary/presentation/diary/bloc/diary_bloc.dart';
 
 class MoodListView extends StatelessWidget {
   const MoodListView({super.key});

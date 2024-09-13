@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mood_diary/diary/bloc/diary_bloc.dart';
-import 'package:mood_diary/diary/widgets/mood_list_view.dart';
-import 'package:mood_diary/diary/widgets/note_text_area.dart';
-import 'package:mood_diary/diary/widgets/save_button.dart';
-import 'package:mood_diary/diary/widgets/slider_widget.dart';
-import 'package:mood_diary/diary/widgets/sub_mood_widget.dart';
-import 'package:mood_diary/diary/widgets/title_widget.dart';
+import 'package:mood_diary/presentation/diary/bloc/diary_bloc.dart';
+import 'package:mood_diary/presentation/diary/widgets/mood_list_view.dart';
+import 'package:mood_diary/presentation/diary/widgets/note_text_area.dart';
+import 'package:mood_diary/presentation/diary/widgets/save_button.dart';
+import 'package:mood_diary/presentation/diary/widgets/slider_widget.dart';
+import 'package:mood_diary/presentation/diary/widgets/sub_mood_widget.dart';
+import 'package:mood_diary/presentation/diary/widgets/title_widget.dart';
 
 class Diary extends StatelessWidget {
   const Diary({super.key});
